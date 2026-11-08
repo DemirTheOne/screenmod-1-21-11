@@ -22,7 +22,7 @@ public final class ServerImageStore {
 	}
 
 	public static Path dir(MinecraftServer server) throws IOException {
-		Path dir = server.getWorldPath(LevelResource.ROOT).resolve("screenmod_images");
+		Path dir = server.getWorldPath(LevelResource.ROOT).toAbsolutePath().normalize().resolve("screenmod_images");
 		Files.createDirectories(dir);
 		return dir;
 	}
@@ -88,27 +88,34 @@ public final class ServerImageStore {
 		}
 	}
 
-	/** @return true if the image is stored (also when an identical name already exists) */
-	public static boolean write(MinecraftServer server, String name, byte[] data) {
-		if (sanitize(name) == null || !sanitize(name).equals(name) || !looksLikeImage(data) || data.length > MAX_IMAGE_BYTES) {
-			return false;
+	/** @return null on success, otherwise a short human readable reason */
+	@Nullable
+	public static String write(MinecraftServer server, String name, byte[] data) {
+		if (sanitize(name) == null || !sanitize(name).equals(name)) {
+			return "invalid file name";
+		}
+		if (!looksLikeImage(data)) {
+			return "file is not a real PNG/JPEG";
+		}
+		if (data.length > MAX_IMAGE_BYTES) {
+			return "file is larger than 8 MB";
 		}
 		try {
 			Path dir = dir(server);
 			Path file = dir.resolve(name).normalize();
 			if (!file.startsWith(dir)) {
-				return false;
+				return "invalid path";
 			}
 			if (Files.exists(file)) {
-				return true;
+				return null;
 			}
 			if (list(server).size() >= MAX_IMAGES) {
-				return false;
+				return "server image limit (" + MAX_IMAGES + ") reached";
 			}
 			Files.write(file, data);
-			return true;
+			return null;
 		} catch (IOException e) {
-			return false;
+			return "could not write file (" + e.getMessage() + ")";
 		}
 	}
 }
