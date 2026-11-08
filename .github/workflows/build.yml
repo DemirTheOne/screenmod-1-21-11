@@ -16,15 +16,28 @@ jobs:
           java-version: '25'
           distribution: 'microsoft'
 
-      - name: Zip dosyasini ac
+      - name: Projeyi bul
         id: proj
         run: |
           set -euo pipefail
-          Z=$(ls *.zip | head -n 1)
-          echo "Zip: $Z"
-          mkdir work
-          unzip -q "$Z" -d work
-          G=$(find work -name gradlew | awk '{print length, $0}' | sort -n | head -n 1 | cut -d' ' -f2-)
+          ROOT=.
+          # Zip varsa ac, yoksa dosyalar zaten acik demektir
+          if ls ./*.zip >/dev/null 2>&1; then
+            Z=$(ls ./*.zip | head -n 1)
+            echo "Zip bulundu: $Z"
+            mkdir -p work
+            unzip -q "$Z" -d work
+            ROOT=work
+          else
+            echo "Zip yok, repodaki dosyalar kullanilacak"
+          fi
+          G=$(find "$ROOT" -name gradlew -not -path '*/.git/*' | awk '{print length, $0}' | sort -n | head -n 1 | cut -d' ' -f2- || true)
+          if [ -z "$G" ]; then
+            echo "HATA: gradlew dosyasi bulunamadi. Dosyalar eksik yuklenmis olabilir."
+            find . -maxdepth 3 -not -path './.git/*' | head -60
+            exit 1
+          fi
+          echo "Proje klasoru: $(dirname "$G")"
           echo "dir=$(dirname "$G")" >> "$GITHUB_OUTPUT"
 
       - name: Derle
@@ -42,7 +55,7 @@ jobs:
       - name: Jar'i yukle
         uses: actions/upload-artifact@v7
         with:
-          name: simply-screens-jar
+          name: screenmod-jar
           path: |
-            work/**/build/libs/*.jar
-            !work/**/build/libs/*-sources.jar
+            **/build/libs/*.jar
+            !**/build/libs/*-sources.jar
