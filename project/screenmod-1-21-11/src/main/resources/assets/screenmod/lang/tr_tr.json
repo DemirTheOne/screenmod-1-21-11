@@ -1,0 +1,18 @@
+{
+  "block.screenmod.screen": "Ekran",
+  "screenmod.gui.title": "Ekran Ayarları",
+  "screenmod.gui.screen_id": "Ekran ID (boş = tekil)",
+  "screenmod.gui.source": "Resim dosya yolu veya http(s) URL",
+  "screenmod.gui.browse": "Gözat...",
+  "screenmod.gui.import": "İçe aktar",
+  "screenmod.gui.none": "Yok",
+  "screenmod.gui.apply": "Uygula",
+  "screenmod.gui.cancel": "İptal",
+  "screenmod.gui.aspect_on": "En-boy oranını koru: AÇIK",
+  "screenmod.gui.aspect_off": "En-boy oranını koru: KAPALI",
+  "screenmod.gui.prev": "<",
+  "screenmod.gui.next": ">",
+  "screenmod.gui.images": "Sunucudaki resimler",
+  "screenmod.gui.uploading": "Yükleniyor: %s ...",
+  "screenmod.gui.error": "Hata: %s"
+}

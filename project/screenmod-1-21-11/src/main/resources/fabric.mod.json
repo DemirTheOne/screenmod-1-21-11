@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "screenmod",
+  "version": "${version}",
+  "name": "Screen Mod",
+  "description": "Screen blocks that display images from local files or URLs. Multi-block displays up to 64x64 and Screen ID networks. Standalone port: no OpenUI/PacketWeave required.",
+  "authors": ["nstut (original)", "Fabric 1.21.11 port"],
+  "contact": { "sources": "https://github.com/UpperMoon0/Simply-Screens" },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.demir.screenmod.ScreenMod"],
+    "client": ["com.demir.screenmod.client.ScreenModClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

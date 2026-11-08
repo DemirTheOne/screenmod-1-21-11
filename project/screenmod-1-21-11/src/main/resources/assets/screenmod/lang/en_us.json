@@ -1,0 +1,18 @@
+{
+  "block.screenmod.screen": "Screen",
+  "screenmod.gui.title": "Screen Settings",
+  "screenmod.gui.screen_id": "Screen ID (empty = standalone)",
+  "screenmod.gui.source": "Image file path or http(s) URL",
+  "screenmod.gui.browse": "Browse...",
+  "screenmod.gui.import": "Import",
+  "screenmod.gui.none": "None",
+  "screenmod.gui.apply": "Apply",
+  "screenmod.gui.cancel": "Cancel",
+  "screenmod.gui.aspect_on": "Keep aspect ratio: ON",
+  "screenmod.gui.aspect_off": "Keep aspect ratio: OFF",
+  "screenmod.gui.prev": "<",
+  "screenmod.gui.next": ">",
+  "screenmod.gui.images": "Server images",
+  "screenmod.gui.uploading": "Uploading %s ...",
+  "screenmod.gui.error": "Error: %s"
+}
