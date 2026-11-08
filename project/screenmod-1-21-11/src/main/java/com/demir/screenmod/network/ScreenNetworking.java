@@ -118,10 +118,11 @@ public final class ScreenNetworking {
 		upload.next++;
 		if (upload.next == upload.total) {
 			UPLOADS.remove(id);
-			if (ServerImageStore.write(server, upload.name, upload.buffer.toByteArray())) {
+			String error = ServerImageStore.write(server, upload.name, upload.buffer.toByteArray());
+			if (error == null) {
 				sendList(player, server);
 			} else {
-				player.sendSystemMessage(Component.literal("[Simply Screens] Upload rejected (not a valid png/jpg, or the image limit was reached)."));
+				player.sendSystemMessage(Component.literal("[Screen Mod] Upload rejected: " + error));
 			}
 		}
 	}
