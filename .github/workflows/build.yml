@@ -1,0 +1,48 @@
+name: build
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+
+      - name: Zip dosyasini ac
+        id: proj
+        run: |
+          set -euo pipefail
+          Z=$(ls *.zip | head -n 1)
+          echo "Zip: $Z"
+          mkdir work
+          unzip -q "$Z" -d work
+          G=$(find work -name gradlew | awk '{print length, $0}' | sort -n | head -n 1 | cut -d' ' -f2-)
+          echo "dir=$(dirname "$G")" >> "$GITHUB_OUTPUT"
+
+      - name: Derle
+        working-directory: ${{ steps.proj.outputs.dir }}
+        run: |
+          chmod +x ./gradlew
+          sed -i 's/^networkTimeout=.*/networkTimeout=120000/' gradle/wrapper/gradle-wrapper.properties
+          for i in 1 2 3; do
+            ./gradlew build --no-daemon && exit 0
+            echo "Deneme $i basarisiz, tekrar deneniyor..."
+            sleep 15
+          done
+          exit 1
+
+      - name: Jar'i yukle
+        uses: actions/upload-artifact@v7
+        with:
+          name: simply-screens-jar
+          path: |
+            work/**/build/libs/*.jar
+            !work/**/build/libs/*-sources.jar
